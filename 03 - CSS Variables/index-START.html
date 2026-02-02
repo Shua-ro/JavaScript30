@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title>Scoped CSS Variables and JS</title>
   <link rel="icon" href="https://fav.farm/🔥" />
 </head>
+
 <body>
   <h2>Update CSS Variables with <span class='hl'>JS</span></h2>
 
@@ -22,7 +24,6 @@
   <img src="https://source.unsplash.com/7bwQXzbF6KE/800x500">
 
   <style>
-
     /*
       misc styles, nothing to do with CSS variables
     */
@@ -46,7 +47,39 @@
   </style>
 
   <script>
+    const spacing = document.querySelector("#spacing")
+    const blur = document.querySelector("#blur")
+    const image = document.querySelector("img")
+    const base = document.querySelector("#base")
+
+
+
+
+    /* Blur slider */
+    function blurs() {
+      let blurValue = blur.value
+      image.style.filter = `blur(${blurValue}px)`
+    }
+
+
+    /* Padding and Spacing slider*/
+    function space() {
+      let spacingValue = spacing.value;
+      image.style.padding = `${spacingValue}px`
+    }
+
+    function baseV() {
+      image.style.backgroundColor = base.value;
+    }   
+     /* REFACTORED */
+    spacing.addEventListener("input", space)
+    blur.addEventListener("input", blurs)
+    base.addEventListener("input", baseV)
+    space()
+    blurs()
+    baseV()
   </script>
 
 </body>
+
 </html>
