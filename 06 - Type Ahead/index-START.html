@@ -1,11 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title>Type Ahead 👀</title>
   <link rel="stylesheet" href="style.css">
   <link rel="icon" href="https://fav.farm/🔥" />
+  <style>
+    .highlight{
+      background-color: rgb(255, 182, 46);
+    }
+  </style>
 </head>
+
 <body>
 
   <form class="search-form">
@@ -15,9 +22,78 @@
       <li>or a state</li>
     </ul>
   </form>
-<script>
-const endpoint = 'https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json';
+  <script>
+    const endpoint = 'https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json';
+    /* Data Storage */
+    const cities = []
 
-</script>
+    /* Fetch Here */
+    fetch(endpoint)
+      .then(response => response.json())
+      .then(data => {
+        cities.push(...data)
+
+
+      })
+      .catch(error => console.log("Something went wrong with this endpoint fetch"))
+
+    /* Variable Declaration */
+    const search = document.querySelector(".search")
+    const suggestions = document.querySelector(".suggestions")
+    
+      
+ 
+      
+      const populationSort = cities.sort((a, b) =>{
+        if(a.population<b.population){
+          return -1
+        }
+        if (a.population>b.population){
+          return 1
+        }
+      })
+      
+      
+    /* Keylistener -> Filterer -> if not empty -> display */
+    /* Event Listener that checks the keys typed */
+    search.addEventListener("keyup", (word) => {
+      /* A function that FILTERS the array */
+      console.clear()
+      const regex = new RegExp(search.value, 'gi')
+      const cityKeywords = populationSort.filter(city => {
+        let theCity = city.city
+        let theState = city.state
+        
+        if (theCity.match(regex) || theState.match(regex)) {
+          if (!search.value.length == 0) {
+
+            /* console.log(city.city); */
+            return city.city
+          }
+
+
+        }
+      })
+      
+      
+
+      /* A function that displays the suggestions */
+      const mapping = cityKeywords.map((eachCity) => {     
+        
+        const newCity = eachCity.city.replace(regex,`<span class="highlight">$&</span>`)
+        const stateName = eachCity.state.replace(regex,`<span class="highlight">$&</span>`)
+        return `<li><span class="locations">${newCity}, ${stateName}</span><span> ${parseInt(eachCity.population).toLocaleString()}</span></li>`
+
+      }).join('')
+
+      suggestions.innerHTML = mapping
+    })
+
+
+
+
+
+  </script>
 </body>
+
 </html>
